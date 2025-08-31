@@ -72,7 +72,7 @@ type Installation struct {
 }
 
 // RegisterFCM registers FCM using credentials from InstallFCM and GCM token.
-func RegisterFCM(cfg FirebaseConfig, authToken, token string) (*FCMRegistration, error) {
+func RegisterFCM(cfg FirebaseConfig, fid, authToken, token string) (*FCMRegistration, error) {
 	keys, err := createKeys()
 	if err != nil {
 		return nil, err
@@ -93,6 +93,7 @@ func RegisterFCM(cfg FirebaseConfig, authToken, token string) (*FCMRegistration,
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("x-goog-api-key", cfg.APIKey)
+	req.Header.Set("x-goog-firebase-installations-id", fid)
 	req.Header.Set("x-goog-firebase-installations-auth", authToken)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

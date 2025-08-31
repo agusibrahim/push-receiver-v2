@@ -16,7 +16,7 @@ func Register(cfg FirebaseConfig) (*Credentials, error) {
 	if err != nil {
 		return nil, err
 	}
-	fcmReg, err := RegisterFCM(cfg, inst.AuthToken.Token, gcmCreds.Token)
+	fcmReg, err := RegisterFCM(cfg, inst.Fid, inst.AuthToken.Token, gcmCreds.Token)
 	if err != nil {
 		return nil, err
 	}
