@@ -1,33 +1,27 @@
 # pushreceiver (Go)
 
-This directory contains an experimental Go port of the
-`push-receiver-v2` library. It exposes a minimal API compatible with the
-JavaScript version while leaving the underlying network protocol as
-future work.
+This directory contains a Go port of the `push-receiver-v2` library.
+It implements the registration flow against the public Google and
+Firebase endpoints and exposes structures mirroring the JavaScript
+version.
 
 ## Usage
 
 ```go
-creds := pushreceiver.Credentials{
-    GCM: pushreceiver.GCMCredentials{
-        AndroidID:    "...",
-        SecurityToken: "...",
-    },
-    Keys: pushreceiver.Keys{
-        PrivateKey: "...",
-        AuthSecret: "...",
-    },
+cfg := pushreceiver.FirebaseConfig{
+    APIKey:    "<firebase api key>",
+    AppID:     "<firebase app id>",
+    ProjectID: "<firebase project id>",
+    VapidKey:  "<vapid public key>",
 }
 
-client, err := pushreceiver.Listen(creds, func(n pushreceiver.Notification) {
-    // handle notification
-})
+creds, err := pushreceiver.Register(cfg)
 if err != nil {
-    // handle error
+    panic(err)
 }
-// use client ...
+fmt.Println("GCM Token:", creds.GCM.Token)
 ```
 
-The current implementation focuses on the public API surface; message
-parsing and decryption are not yet implemented.
+The client connection used to receive messages is still under
+development.
 
